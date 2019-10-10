@@ -70,7 +70,7 @@ const main = (req, res) => {
 const routers = {
     //testing routing
     "ping": handlers.ping,
-    "analize_my_request": handlers.analize_my_request,
+    "analyze_my_request": handlers.analyze_my_request,
     //end of testing routing
     "notFound": handlers.notFound,
 };
