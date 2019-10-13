@@ -1,0 +1,27 @@
+#DOCKER COMPOSE FILE
+#CREATED BY FELIPE MANTOVANI
+version: '3'
+
+services:
+  #FIRST VM: THE DATABASE
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: todo_team
+      MYSQL_DATABASE: todo_team
+      MYSQL_USER: todo_team
+      MYSQL_PASSWORD: todo_team
+    ports:
+      - '7778:7778'
+  #SECOND VM: THE BACKEND, TO BE UP WHENEVER DB IS UP
+  backend:
+    build: ./backend
+    ports:
+      - 3000:3000 #@TODO: this port will change when a port to front end is assigned
+    depends_on:
+      - db
+  #THIRD VM: FRONTEND
+  frontend: #@TODO: assign ports to frontend!
+    build: ./frontend
+     
