@@ -1,66 +1,112 @@
+/**
+ * @author Felipe Mantovani
+ */
 
-const url = require('url');
+const con                          = require('./models/connection'),
+helpers                            = {};
+helpers.utils                      = {};
+helpers.repo                       = {};
+helpers.utils.generateSQLTimestamp = date => date.toISOString().slice(0, 19).replace('T', ' ');
 
-const helper = {};
+//utils container will host logic methods to aid operations
 
-//creating requestParser container
-helper.requestParser = {};
-
+//helpers container will host all database communication 
 
 /**
- * Takes an http request and returns its trimmed path.
- * @param req: Request
- * @returns trimmedPath : string
+ * Execute the call of a stored procedure
+ * inserts a new record to the table
+ * 
+ * @param{uid, callback} All required 
  */
-helper.requestParser.retrieveTrimmedPath = (req) => {
-    const parseUrl = helper.requestParser.parseUrl(req);
+helpers.insertLoyaltyPoint         = (uid, callback) => {    
+    con.query(`call addLoyalPoint('${uid}');`, (err_, result) => {
+            if (err_) {
+                callback(501, "Did not create point");
+            }else{
+                callback(201, true);
+        }                
+    });
+}       
 
-    const path = parseUrl.pathname;
-    return path.replace(/^\/+|\/+$/g, '');
+/**
+ * Execute the selection query of a view
+ * retuns the resultset of the select query
+ * 
+ * @param{callback} All required 
+ */
+helpers.selectAllLoyaltyPoints     = (callback) => {
+    con.query(`select * from selectAllLoyalPoints`, (err_, result) => {
+        if (err_) {
+            callback(501, false);
+        }else{
+            callback(200, result);
+    }                
+});
 }
 
 /**
- * returns the query string object from a given request
- * @param req : Request
- * @returns queryStringObject : object
+ * Execute the selection query of a view
+ * retuns the resultset of the select query
+ * 
+ * @param{callback} All required 
  */
-helper.requestParser.retrieveQueryStringObject = (req) => {
-    return helper.requestParser.parseUrl(req).query;
+helpers.selectPromo                = (callback)=>{
+    con.query(`select * from getPromosAmount;`, (err_, result) => {
+        if (err_) {
+            callback(500, false);
+        }else{
+            callback(200, result);
+        }
+    });  
 }
 
 /**
- * @returns method: string
+ * Execute the call of a stored procedure
+ * update the table by incremment value of redeemed_promo by one
+ * 
+ * @param{callback} All required 
  */
-helper.requestParser.retrieveMethod = (req) => {
-    return req.method.toLowerCase();
-}
-
-helper.requestParser.retrieveHeaders = (req) => {
-    return req.headers;
+helpers.updatePromo                = (callback)=>{
+    con.query(`call incrementPromo()`, (err_, result) => {
+        if (err_) {
+            callback(500, false);
+        }else{
+            callback(200, "Incremented successfuly");
+        }
+    });  
 }
 
 /**
- * Takes request and parses its URL
- * @param req: Request
- * @returns parsedUrl : object
+ * Execute the call of a stored procedure
+ * update the table by changing value of points of a given record
+ * 
+ * @param{loyaoutRecord, callback} All required 
+ * loyoutyRecord should be an instance of pojo.LoyoutyRecord class
  */
-helper.requestParser.parseUrl = (req) => {
-    return url.parse(req.url, true);
+helpers.updateLoyaltyPoint         = (loyaltyRecord, callback)=>{
+    const {uid, points, date} = loyaltyRecord;
+    con.query(`call incrementLoyalPoint('${uid}','${points}')`, (err_, result) => {
+        if (err_) {
+            callback(500, false);
+        }else{
+            callback(200, `Incremented loyout point successfuly for ${uid}`);
+        }
+    });  
 }
-
-
 /**
- * Parses a JSON more efficiently
- * @returns an empty object if exception is thrown
+ * Execute the call of a stored procedure
+ * deletes a record from the table by the given uid
+ * 
+ * @param{uid, callback} All required 
  */
-helper.parseJSON = (str) => {
-    try{
-        return JSON.parse(str);
-    }catch(e){
-        return {}
-    }
+helpers.deleteLoyaltyPoint         = (uid, callback)=>{
+    con.query(`call deleteLoyalPointRecord('${uid}')`, (err_, result) => {
+        if (err_) {
+            callback(500, false);
+        }else{
+            callback(200, `Successfully deleted ${uid}`);
+        }
+    });  
 }
 
-
-
-module.exports = helper;
+module.exports                     = helpers;

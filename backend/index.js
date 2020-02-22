@@ -1,4 +1,69 @@
+ /**
+  * @author Felipe Mantovani
+  */
+ 
+ //NPM modules
+ const express     = require('express'),
+ cors              = require('cors'),
+ 
+ //My own libraries
+config             = require('./lib/config'),
+handlers           = require('./lib/handlers'),
 
+//router
+router             = express();
+
+
+router.use(express.json());
+router.use(cors());
+/**GET */
+router.get('/api/loyaltyPoints', handlers.getLoyaltyPoints);
+router.get('/api/promo', handlers.getPromo);
+
+/**POST */
+router.post('/api/loyaltyPoint', handlers.loyaltyPoint);
+
+
+
+/**PUT */
+router.put('/api/loyaltyPoint', handlers.putLoyaltyPoint);
+router.put('/api/promo', handlers.putPromo);
+
+/**DELETE */
+router.delete('/api/loyaltyPoint', handlers.deleteLoyaltyPoint);
+
+
+
+router.listen(config.httpPort, ()=>{
+    console.log(`Running ${config.name} on ${config.httpPort} port`)
+});
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /*
 //importing all the dependencies
 const http = require('http');
 const https = require('https');
@@ -74,3 +139,4 @@ const routers = {
     //end of testing routing
     "notFound": handlers.notFound,
 };
+*/

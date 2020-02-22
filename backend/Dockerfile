@@ -15,4 +15,7 @@ WORKDIR /root/apps
 #COPYING THE FILES FROM THE SAME LEVEL AS THIS DOCKERFILE TO THE WORKDIRECTORY
 COPY . /root/apps
 
+RUN npm i express cors
+RUN npm i -g nodemon
+
 CMD ["node" , "/root/apps/index.js"]
