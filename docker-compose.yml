@@ -1,27 +1,29 @@
 #DOCKER COMPOSE FILE
 #CREATED BY FELIPE MANTOVANI
-version: '3'
+version: '3.7'
 
 services:
   #FIRST VM: THE DATABASE
   db:
-    image: mysql:5.7
+    image: mysql:8.0.19
     restart: always
+    volumes:
+      - /docker-entrypoint-initdb.d:/Users/marcelus/myApps/_@TODO_project/db/base.sql
     environment:
-      MYSQL_ROOT_PASSWORD: todo_team
-      MYSQL_DATABASE: todo_team
-      MYSQL_USER: todo_team
-      MYSQL_PASSWORD: todo_team
+      MYSQL_ROOT_PASSWORD: '12345678'
+      MYSQL_DATABASE: 'loyals'
+      MYSQL_USER: 'loyal_user'
+      MYSQL_PASSWORD: '87654321'
     ports:
-      - '7778:7778'
+      - "3306:3306"
   #SECOND VM: THE BACKEND, TO BE UP WHENEVER DB IS UP
   backend:
     build: ./backend
     ports:
-      - 3000:3000 #@TODO: this port will change when a port to front end is assigned
+      - "3000:3000" #@TODO: this port will change when a port to front end is assigned
     depends_on:
       - db
   #THIRD VM: FRONTEND
-  frontend: #@TODO: assign ports to frontend!
-    build: ./frontend
+  #frontend: #@TODO: assign ports to frontend!
+  #  build: ./frontend
      

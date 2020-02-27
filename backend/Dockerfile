@@ -18,4 +18,4 @@ COPY . /root/apps
 RUN npm i express cors
 RUN npm i -g nodemon
 
-CMD ["node" , "/root/apps/index.js"]
+CMD ["npm", "run", "mon"]
