@@ -2,7 +2,7 @@
  * @author Felipe Mantovani
  */
 
-const con                          = require('./models/connection'),
+const conn                          = require('./models/connection'),
 helpers                            = {};
 helpers.utils                      = {};
 helpers.repo                       = {};
@@ -18,12 +18,14 @@ helpers.utils.generateSQLTimestamp = date => date.toISOString().slice(0, 19).rep
  * 
  * @param{uid, callback} All required 
  */
-helpers.insertLoyaltyPoint         = (uid, callback) => {    
-    con.query(`call addLoyalPoint('${uid}');`, (err_, result) => {
+helpers.insertLoyaltyPoint         = (uid, callback) => { 
+    conn.connect();   
+    conn.con.query(`call addLoyalPoint('${uid}');`, (err_, result) => {
             if (err_) {
                 callback(501, "Did not create point");
             }else{
                 callback(201, true);
+
         }                
     });
 }       
@@ -35,7 +37,8 @@ helpers.insertLoyaltyPoint         = (uid, callback) => {
  * @param{callback} All required 
  */
 helpers.selectAllLoyaltyPoints     = (callback) => {
-    con.query(`select * from selectAllLoyalPoints`, (err_, result) => {
+    conn.connect();
+    conn.con.query(`select * from selectAllLoyalPoints`, (err_, result) => {
         if (err_) {
             callback(501, false);
         }else{
@@ -51,7 +54,8 @@ helpers.selectAllLoyaltyPoints     = (callback) => {
  * @param{callback} All required 
  */
 helpers.selectPromo                = (callback)=>{
-    con.query(`select * from getPromosAmount;`, (err_, result) => {
+    conn.connect();
+    conn.con.query(`select * from getPromosAmount;`, (err_, result) => {
         if (err_) {
             callback(500, false);
         }else{
@@ -67,7 +71,8 @@ helpers.selectPromo                = (callback)=>{
  * @param{callback} All required 
  */
 helpers.updatePromo                = (callback)=>{
-    con.query(`call incrementPromo()`, (err_, result) => {
+    conn.connect();
+    conn.con.query(`call incrementPromo()`, (err_, result) => {
         if (err_) {
             callback(500, false);
         }else{
@@ -84,8 +89,9 @@ helpers.updatePromo                = (callback)=>{
  * loyoutyRecord should be an instance of pojo.LoyoutyRecord class
  */
 helpers.updateLoyaltyPoint         = (loyaltyRecord, callback)=>{
+    conn.connect();
     const {uid, points, date} = loyaltyRecord;
-    con.query(`call incrementLoyalPoint('${uid}','${points}')`, (err_, result) => {
+    conn.con.query(`call incrementLoyalPoint('${uid}','${points}')`, (err_, result) => {
         if (err_) {
             callback(500, false);
         }else{
@@ -100,7 +106,8 @@ helpers.updateLoyaltyPoint         = (loyaltyRecord, callback)=>{
  * @param{uid, callback} All required 
  */
 helpers.deleteLoyaltyPoint         = (uid, callback)=>{
-    con.query(`call deleteLoyalPointRecord('${uid}')`, (err_, result) => {
+    conn.connect();
+    conn.con.query(`call deleteLoyalPointRecord('${uid}')`, (err_, result) => {
         if (err_) {
             callback(500, false);
         }else{

@@ -1,10 +1,10 @@
 
-drop database if exists loyals ;
-create database loyals;
+-- drop database if exists loyals ;
+-- create database loyals;
 
 use loyals;
 
-drop table if exists louyal_points;
+drop table if exists loyal_points;
 create table loyal_points(
 	id int(11) not null,
     uid varchar(15) not null unique,
@@ -70,7 +70,11 @@ begin
 end //
 delimiter ;
 
+CALL insertPromo();
+
 create view selectAllLoyalPoints as select id, uid, points, date_ from loyal_points;
 
 create view getPromosAmount as select amount from redeemed_promo;
+
+
 

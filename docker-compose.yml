@@ -3,27 +3,30 @@
 version: '3.7'
 
 services:
-  #FIRST VM: THE DATABASE
-  db:
-    image: mysql:8.0.19
-    restart: always
-    volumes:
-      - /docker-entrypoint-initdb.d:/Users/marcelus/myApps/_@TODO_project/db/base.sql
-    environment:
-      MYSQL_ROOT_PASSWORD: '12345678'
-      MYSQL_DATABASE: 'loyals'
-      MYSQL_USER: 'loyal_user'
-      MYSQL_PASSWORD: '87654321'
-    ports:
-      - "3306:3306"
+  
   #SECOND VM: THE BACKEND, TO BE UP WHENEVER DB IS UP
   backend:
     build: ./backend
     ports:
-      - "3000:3000" #@TODO: this port will change when a port to front end is assigned
+      - "3000:3000" 
     depends_on:
       - db
   #THIRD VM: FRONTEND
   #frontend: #@TODO: assign ports to frontend!
   #  build: ./frontend
+
+  #FIRST VM: THE DATABASE
+  db:
+    image: mysql:8.0.19
+    volumes:
+      - ./db/:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - "MYSQL_ROOT_PASSWORD=12345678"
+      - "MYSQL_DATABASE=loyals"
+      - "MYSQL_USER=loyal_user"
+      - "MYSQL_PASSWORD=87654321"
+    ports:
+      - "3306:3306"
      
