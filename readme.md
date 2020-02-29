@@ -40,7 +40,7 @@ Once the the daemon has been installed, open it and navigate to the docker-compo
         <tr>
             <td>5</td>
             <td>Clear any containers netowrk connections</td>
-            <td><code>>>docker netowork prune</code></td>
+            <td><code>>>docker network prune</code></td>
         </tr>
     </table>
 </div>
