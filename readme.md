@@ -30,7 +30,17 @@ Once the the daemon has been installed, open it and navigate to the docker-compo
         <tr>
             <td>3</td>
             <td>Remove volumes (free HD)</td>
-            <td><code>>>docker volume prune</code></td>
+            <td><code>>>docker volumes prune</code></td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Clean all images</td>
+            <td><code>>>docker image prune</code></td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Clear any containers netowrk connections</td>
+            <td><code>>>docker netowork prune</code></td>
         </tr>
     </table>
 </div>
