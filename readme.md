@@ -29,8 +29,8 @@ Once the the daemon has been installed, open it and navigate to the docker-compo
         </tr>
         <tr>
             <td>3</td>
-            <td>Remove volumes (free HD)</td>
-            <td><code>>>docker volume prune</code></td>
+            <td>Remove {resources}(image/volumes/network ) (free HD)</td>
+            <td><code>>>docker {resource} prune</code></td>
         </tr>
     </table>
 </div>
