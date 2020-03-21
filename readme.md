@@ -30,7 +30,7 @@ Once the the daemon has been installed, open it and navigate to the docker-compo
         <tr>
             <td>3</td>
             <td>Remove volumes (free HD)</td>
-            <td><code>>>docker volumes prune</code></td>
+            <td><code>>>docker volume prune</code></td>
         </tr>
         <tr>
             <td>4</td>
@@ -56,86 +56,115 @@ Once the the daemon has been installed, open it and navigate to the docker-compo
         </th>
         <tr>
             <td>1</td>
-            <td><code>/api/loyaltyPoints</code></td>
+            <td><code>/api/balance</code></td>
             <td>
                 <ul>
                     <li>GET:
                         <ul>
-                            <li>Required: None</li>
+                            <li>Required: :uuid</li>
                             <li>Optional: None</li>
                         </ul>
                     </li>
                 </ul>
             </td>
             <td>
+            <!-- <div>
+                router.get('/api/customers', handlers.getCustomer);
+                router.get('/api/customers/:id', handlers.getCustomer);
+                router.get('/api/cards/', handlers.getCard);
+                router.get('/api/cards/:uuid/', handlers.getCard);
+                router.get('/api/balance/:uuid', handlers.getBalance);
+                router.get('/api/transactions/:uuid', handlers.getTransactions);
+                router.get('/api/transactions/', handlers.getTransactions);
+                router.post('/api/customers/cards/', handlers.createCustomerWithUUID);
+                router.post('/api/customers/cards/:customer_id', handlers.createCustomerWithUUID);
+                router.post('/api/transactions/:value', handlers.createTransaction);
+            </div> -->
                 <ul>
-                    <li>GET: Responds all tuples in the loyal_points relation in JSON format</li>
+                    <li>GET: Retrieve the balance (amount of acummulated points) of a spcific card. the :uuid parameter must be passed</li>
                 </ul>
             </td>
         </tr>
         <tr>
             <td>2</td>
-            <td><code>/api/promo</code></td>
+            <td><code>/api/customers</code></td>
             <td>
                 <ul>
                     <li>GET:
                         <ul>
                             <li>Required: None</li>
-                            <li>Optional: None</li>
-                        </ul>
-                    </li>
-                    <li>PUT:
-                        <ul>
-                            <li>Required: None</li>
-                            <li>Optional: None</li>
+                            <li>Optional: /:id</li>
                         </ul>
                     </li>
                 </ul>
             </td>
             <td>
                 <ul>
-                    <li>GET: Respond the number of times the promotion was redeemed</li>
-                    <li>PUT: Update the redeemed promo by incrementing in one</li>
+                    <li>GET: Lists customer records. If the :id is passed, it will retrieve info about customer with the id provided</li>
                 </ul>
             </td>
         </tr>
         <tr>
             <td>3</td>
-            <td><code>/api/loyaltyPoint/</code></td>
+            <td><code>/api/cards/</code></td>
             <td>
                 <ul>
                     <li>GET:
                         <ul>
-                            <li>Required: uid</li>
-                            <li>Optional: None</li>
-                        </ul>
-                    </li>
-                    <li>POST:
-                        <ul>
-                            <li>Required: uid</li>
-                            <li>Optional: None</li>
-                        </ul>
-                    </li>
-                    <li>PUT:
-                        <ul>
-                            <li>Required: uid</li>
-                            <li>Optional: points</li>
-                        </ul>
-                    </li>
-                    <li>DELETE:
-                        <ul>
-                            <li>Required: uid</li>
-                            <li>Optional: None</li>
+                            <li>Required: None</li>
+                            <li>Optional: /:uuid, </li>
                         </ul>
                     </li>
                 </ul>
             </td>
             <td>
                 <ul>
-                    <li>GET: Get info about a specific loyal_point record</li>
-                    <li>POST: register to the loyal_point relation a new record</li>
-                    <li>PUT: Respond the number of times the promotion was redeemed. If points parameter is not specified, then it will increment in one</li>
-                    <li>DELETE: Remove a record from loyal_point</li>
+                    <li>GET: Retrive a list of cards info from the database. If :uuid is specified, the result will be a specific card with provided uuid if exists.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td><code>/api/transactions/</code></td>
+            <td>
+                <ul>
+                    <li>GET:
+                        <ul>
+                            <li>Required: None</li>
+                            <li>Optional: :uuid, </li>
+                        </ul>
+                    </li>
+                    <li>POST:
+                        <ul>
+                            <li>Required: :uuid</li>
+                            <li>Optional: None, </li>
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li>GET: Get all ofrecords of the transaction entity. If uuid is passed, it gets transactions associated with a specific card.</li>
+                    <li>POST: Add a transaction record to the transactions entity. The uuid parameter must be specified cause the value (point) will be added to a specific card.</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td><code>/api/customers/cards/</code></td>
+            <td>
+                <ul>
+                    <li>POST:
+                        <ul>
+                            <li>Required: uuid</li>
+                            <li>Optional: :customer_id, </li>
+                        </ul>
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li>POST: If customer_id is not passed, it will create a new customer and associate the passed uuid to this recently created customer. If customer_id is passed, it will add a new card to that customer, if customer_id value is an existing customer id in the records table. </li>
                 </ul>
             </td>
         </tr>

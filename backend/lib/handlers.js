@@ -3,7 +3,8 @@
  */
 
 const helper        = require('./helper')
-const LoyaltyRecord = require('./models/pojo').LoyaltyRecord;
+const bodyParser    = require('body-parser');
+const ViewingResult = require('./models/pojo').ViewingResult;
 
 const handlers      = {};
  
@@ -17,128 +18,197 @@ const headers       = {
  * Optional fields: none
  *  @todo add authentication token in the future
  */
-handlers.loyaltyPoint = (req, res) => {
-    const body = req.body;
-    const uid  = body.uid;
-    helper.insertLoyaltyPoint(uid, (status, flag)=>{
-        let result = {};
-        res.writeHead(status, headers);
-        if(flag){
-            result.message = "Created successfuly"
+handlers.getCustomer      = (req, res) => {
+    const customerId = req.params.id;
+    helper.selectCustomer(customerId, (customerData, status, message)=>{
+        const result = new ViewingResult();
+        if(!status && customerData){
+            status = 200;
+            console.log(customerData);
+            if(Array.isArray(customerData)){
+                console.log(customerData);
+                result.customers = {};
+                customerData.forEach(customer=>{
+                    
+                    result.customers[customer.id] = {
+                        "date": customer.date,
+                        "cards" : customer.cards
+                    }
+                });
+                console.log(result);
+            }else{
+                result[customerData.id] = {
+                        "date": customerData.date,
+                        "cards" : customerData.cards
+                }
+            }        
+            delete result.message;
         }else{
-            result.message = status == 500?"Did not connect to DB":status == 501?"Did not insert record":false;
+            if(message){
+                result.message = message
+            }
+            
         }
+        res.writeHead(status, headers);
         res.end(JSON.stringify(result));
-    });     
+    });
+};
+
+handlers.getCard          = (req, res) => {
+    const uuid = req.params.uuid;
+    helper.selectCard(uuid, (cards, status, message)=>{
+        const result = new ViewingResult();
+        if(!status && cards){
+            status = 200;
+            result.cards = {};
+            console.log(cards[0]);
+            if(cards.length == 1 && cards[0].transactions.length > 0){
+                result.cards[cards[0].id] = {
+                    "date":cards[0].date,
+                    "customer_id":cards[0].customer_id,
+                    "uuid": cards[0].uuid,
+                    "transactions": {}
+                };
+
+                cards[0].transactions.forEach(transaction=>{
+                    result.cards[cards[0].id].transactions[transaction.id] = {
+                        "card_id": transaction.card_id,
+                        "customer_id" : transaction.customer_id,
+                        "date" : transaction.date,
+                        "value" : transaction.value
+                    }
+                });
+                
+            }else{
+                result.cards = {};
+                cards.forEach(card=>{
+                    result.cards[card.id] = {
+                        "date":card.date,
+                        "customer_id":card.customer_id,
+                        "uuid": card.uuid,
+                    };
+                });               
+            }
+            
+            delete result.message;
+        }else{
+            if(message){
+                result.message = message;
+            }
+            
+        }
+        res.writeHead(status, headers);
+        res.end(JSON.stringify(result));
+    });
 };
 
 
-/**
- * Required fields: none
- * Optional fields: none
- * @todo add authentication token in the future
- */
-handlers.getLoyaltyPoints = (req, res) => {
-    helper.selectAllLoyaltyPoints((status, flag)=>{
-        const result = {};
-        if(!flag){
-            result.message = "Did not select";
+handlers.getBalance       = (req, res) => {
+    const uuid = req.params.uuid;
+    helper.selectBalance(uuid, (balance, status, message)=>{
+        const result = new ViewingResult();
+        
+        if(!status && balance){
+            status = 200;
+            result.card = {
+                "uuid" : uuid,
+                "balance" : balance
+            }
+
+            delete result.message;
         }else{
-            flag.forEach(record => {
-                const {id, uid, points, date_} = record;
-                result[id] = new LoyaltyRecord(uid, points, date_);
+            if(message){
+                result.message = message;
+            }
+        }
+        res.writeHead(status, headers);
+        res.end(JSON.stringify(result));
+    });
+};
+
+handlers.createCustomerWithUUID   = (req, res) => {
+    const uuid = req.body.uuid;
+    const customer_id = req.params.customer_id;
+    console.log(customer_id);
+    if(typeof customer_id == "undefined"){
+        helper.insertCustomerWithUUID(uuid, (newCardId, status, message)=>{
+            const result = new ViewingResult();
+            if(!status && newCardId){
+                status = 200;
+                result.cardId = newCardId;
+                delete result.message;
+            }else{
+                if(message){
+                    result.message = message;
+                }
+            }
+            res.writeHead(status, headers);
+            res.end(JSON.stringify(result));
+        });
+    }else{
+        helper.insertCardToExistingCustomer(uuid, customer_id, (newCardId, status, message)=>{
+            const result = new ViewingResult();
+            console.log(newCardId);
+            if(!status && newCardId){
+                status = 200;
+                result.cardId = newCardId;
+                delete result.message;
+            }else{
+                console.log(result);
+                result.message = message;
+            }
+            res.writeHead(status, headers);
+            res.end(JSON.stringify(result));
+        });
+        
+    }
+};
+
+handlers.createTransaction = (req, res) => {
+    const uuid = req.body.uuid;
+    const value = req.params.value
+    helper.insertTransaction(uuid, value, (sucess, status, message)=>{
+        const result = new ViewingResult();
+        if(!status && sucess){
+            status = 200;
+            result.sucess = true;
+            delete result.message;
+        }else{
+            if(message){
+                result.message = message;
+            }
+        }
+        console.log("enviando resposta");
+        res.writeHead(status, headers);
+        res.end(JSON.stringify(result));
+    });
+};
+
+
+handlers.getTransactions   = (req, res) => {
+    const uuid = req.body.uuid;
+    helpers.getTransactions(uuid, (transactions, status, message)=>{
+        const result = new ViewingResult();
+        if(!status && transactions){
+            status = 200;
+            result.transactions = {};
+            transactions.forEach(transaction=>{
+                result.transactions[transaction.id] = {
+                    "card_id"    : transaction.card_id,
+                    "date"       : transaction.date,
+                    "customer_id": transaction.customer_id,
+                    "value"      : transaction.value
+                }
             });
-        } 
+            delete result.message;
+        }else{
+            if(message){
+                result.message = message;
+            }
+        }
         res.writeHead(status, headers);
         res.end(JSON.stringify(result));
     });
 }
-
-    
-/**
- * Required fields: none
- * Optional fields: none
- * @todo add authentication token in the future
- */
-handlers.getPromo = (req, res) => {
-    const body            = req.body;
-    const uid             = body.uid;
-    helper.selectPromo((status, flag)=>{
-        let result = {};
-        res.writeHead(status, headers);
-        if(flag){
-            result.promo   = flag[0];
-        }else{
-            result.message = status == 500?"Did not connect to DB":status == 501?"Did not select":false;
-        }
-        res.end(JSON.stringify(result));
-    });   
-}
-
-/**
- * Required fields: none
- * Optional fields: none
- * @todo add authentication token in the future
- */
-handlers.putPromo = (req, res) => {
-    helper.updatePromo((status, flag)=>{
-        let result         = {};
-        res.writeHead(status, headers);
-        if(flag){
-            result.message = flag;
-        }else{
-            result.message = status == 500?"Did not connect to DB":status == 501?"Did not insert record":false;
-        }
-        res.end(JSON.stringify(result));
-    });   
-}
-
-/**
- * mandatory fields:uid
- * optional fields:points
- * 
- * if points is not specified, it will be incremmented in 1
- *  @todo add authentication token in the future
- */
-handlers.putLoyaltyPoint = (req, res) => {
-    const body          = req.body;
-    const points        = typeof body.points == 'undefined'? 1 : body.points;
-    const uid           = typeof body.uid == 'undefined'? false : body.uid; 
-    const loyaltyRecord = new LoyaltyRecord(body.uid, points);
-    helper.updateLoyaltyPoint(loyaltyRecord, (status, flag)=>{
-        let result = {};
-        res.writeHead(status, headers); 
-        if(flag && points && uid){
-            result.message = flag;
-        }else{
-            result.message = status == 500?"Did not connect to DB":status == 501?"Did not updated":false;
-        }
-        res.end(JSON.stringify(result));
-    });  
-}
-
-/**
- * Required field: uid
- * Optional field: none 
- * @todo add authentication token in the future
- */
-handlers.deleteLoyaltyPoint = (req, res) => {
-    const body          = req.body;
-    const uid           = typeof body.uid == 'undefined'? false : body.uid; 
-    helper.deleteLoyaltyPoint(uid, (status, flag)=>{
-        let result = {};
-        res.writeHead(status, headers); 
-        if(flag && uid){
-            result.message = flag;
-        }else{
-            result.message = status == 500?"Did not connect to DB":status == 501?"Did not updated":false;
-        }
-        res.end(JSON.stringify(result));
-    });  
-}
-
-
-
-
 
 module.exports = handlers;

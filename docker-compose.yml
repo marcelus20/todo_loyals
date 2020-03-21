@@ -6,11 +6,11 @@ services:
   
   #SECOND VM: THE BACKEND, TO BE UP WHENEVER DB IS UP
   backend:
-    build: ./backend
-    ports:
-      - "3000:3000" 
-    depends_on:
-      - db
+   build: ./backend
+   ports:
+     - "3000:3000" 
+   depends_on:
+     - db
   #THIRD VM: FRONTEND
   #frontend: #@TODO: assign ports to frontend!
   #  build: ./frontend
