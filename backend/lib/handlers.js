@@ -167,11 +167,11 @@ handlers.createCustomerWithUUID   = (req, res) => {
 handlers.createTransaction = (req, res) => {
     const uuid = req.body.uuid;
     const value = req.params.value
-    helper.insertTransaction(uuid, value, (sucess, status, message)=>{
+    helper.insertTransaction(uuid, value, (success, status, message)=>{
         const result = new ViewingResult();
-        if(!status && sucess){
+        if(!status && success){
             status = 200;
-            result.sucess = true;
+            result.success = true;
             delete result.message;
         }else{
             if(message){

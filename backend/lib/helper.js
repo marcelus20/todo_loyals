@@ -141,19 +141,29 @@ helpers.selectBalance         = (uuid, callback) => {
     if(typeof uuid != "undefined"){
         query = `select sum(value) as balance from view_transactions where uuid = ?`;
 
-        conn.con.query(query, [uuid], (err_, result) => {
+        try{
+            conn.con.query(query, [uuid], (err_, result) => {
 
-            if(!err_ && result){
-                if(result.length > 0){
-                    callback(result[0]["balance"]);
+                if(!err_ && result){
+                    if(result[0]["balance"]){
+                        if(result.length > 0){
+                            callback(result[0]["balance"]);
+                        }else{
+                            callback(false, 500 , "No resulset found");
+                        }
+                    }else{
+                        callback(false, 500, "UUID provided may not exist or it has no associated transactions yet.")
+                    }
+                    
                 }else{
-                    callback(false, 500 , "No resulset found");
+                    callback(false, 500 , "could not execute the query");
+                    console.log(err_);
                 }
-            }else{
-                callback(false, 500 , "could not execute the query");
-                console.log(err_);
-            }
-        });
+            });
+        }catch(e){
+            callback(false, 500, "Something went wrong.");
+        }
+        
     }else{
         callback(false, 500, "paramater was not passed");
     }
