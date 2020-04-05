@@ -10,8 +10,6 @@ const Transaction        = require('../models/pojo').Transaction;
 
 const CardController     = class extends AbstractController{
 
-    static cardController = null;
-
     constructor(){
         super();
     }
@@ -82,6 +80,7 @@ const CardController     = class extends AbstractController{
                     });
                 }
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
         });        
@@ -120,6 +119,7 @@ const CardController     = class extends AbstractController{
                     callback(false, httpStatus.INTERNAL_ERROR, messages.INSUFICIENT_PARAMETERS);
                 }
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             } 
         });  
@@ -138,6 +138,7 @@ const CardController     = class extends AbstractController{
                     }
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }       
         });
@@ -156,6 +157,7 @@ const CardController     = class extends AbstractController{
                     }     
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
         });
@@ -174,6 +176,7 @@ const CardController     = class extends AbstractController{
                     }     
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
         });
@@ -190,6 +193,7 @@ const CardController     = class extends AbstractController{
                     }
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
             
@@ -214,6 +218,7 @@ const CardController     = class extends AbstractController{
                     }     
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
         });
@@ -246,6 +251,7 @@ const CardController     = class extends AbstractController{
                     });
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }    
         });

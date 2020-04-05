@@ -8,7 +8,6 @@ const httpStatus            = config.httpStatus;
 const messages              = config.messages;
 
 const TransactionController = class extends AbstractController{
-    static transactionController = null;
 
     constructor(){
         super();
@@ -27,6 +26,7 @@ const TransactionController = class extends AbstractController{
                     }     
                 });
             }catch(e){
+                console.log(e);
                 callback(false, messages.CRASHING_OPERATION);
             }
         });
@@ -45,6 +45,7 @@ const TransactionController = class extends AbstractController{
                     }     
                 });
             }catch(e){
+                console.log(e);
                 callback(false, messages.CRASHING_OPERATION);
             } 
         });
@@ -55,34 +56,41 @@ const TransactionController = class extends AbstractController{
         this.connect(conn=>{
             try{
                 const cardController     = CardController.getInstance();
-                const customerController = CustomerController.getInstance();
-                cardController.getCardId(uuid, cardId=>{
-                    if(!cardId){
-                        //all bad
-                        conn.rollback(()=>callback(false, "card id not found"));
+                cardController.selectBalance(uuid, balance=>{
+                    if(value < 0 && ((-1 * value) > balance)){
+                        //checking if card has enough balance for negative transactions
+                        callback(false, messages.INSUFFICIENT_BALANCE)
                     }else{
-                        //all good
-                        this.insertTransactionRecord_((transactionId, message)=>{
-                            if(!transactionId){
-                                //allbad
-                                conn.rollback(()=>callback(false, message));
+                        const customerController = CustomerController.getInstance();
+                        cardController.getCardId(uuid, cardId=>{
+                            if(!cardId){
+                                //all bad
+                                conn.rollback(()=>callback(false, "card id not found"));
                             }else{
                                 //all good
-                                customerController.getCustomerId(cardId,(customerId, message)=>{
-                                    if(!customerId){
-                                        //all bad
+                                this.insertTransactionRecord_((transactionId, message)=>{
+                                    if(!transactionId){
+                                        //allbad
                                         conn.rollback(()=>callback(false, message));
                                     }else{
                                         //all good
-                                        this.insertTransaction_(transactionId, cardId, customerId, value, (success, message)=>{
-                                            if(success){
-                                                conn.commit(()=>{
-                                                    callback(success);
-                                                });
+                                        customerController.getCustomerId(cardId,(customerId, message)=>{
+                                            if(!customerId){
+                                                //all bad
+                                                conn.rollback(()=>callback(false, message));
                                             }else{
-                                                callback(false, httpStatus.INTERNAL_ERROR, message);
+                                                //all good
+                                                this.insertTransaction_(transactionId, cardId, customerId, value, (success, message)=>{
+                                                    if(success){
+                                                        conn.commit(()=>{
+                                                            callback(success);
+                                                        });
+                                                    }else{
+                                                        callback(false, httpStatus.INTERNAL_ERROR, message);
+                                                    }
+                                                })
                                             }
-                                        })
+                                        });
                                     }
                                 });
                             }
@@ -90,6 +98,7 @@ const TransactionController = class extends AbstractController{
                     }
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
             
@@ -111,6 +120,7 @@ const TransactionController = class extends AbstractController{
                     });  
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
         });
@@ -148,6 +158,7 @@ const TransactionController = class extends AbstractController{
                     conn.query(query, [uuid], callback_);
                 }
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR);
             }
         });

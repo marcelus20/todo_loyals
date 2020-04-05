@@ -6,7 +6,6 @@ const messages           = config.messages;
 const AccesToken         = require('../models/pojo').AccessToken;
 const TokenController    = class extends AbstractController{
 
-    static tokenController = null;
 
     constructor(){
         super();
@@ -14,6 +13,9 @@ const TokenController    = class extends AbstractController{
 
     selectToken(token, callback){
         this.connect(conn=>{
+            if (conn.state == 'disconnected'){
+                conn.connect(err=>{console.log(err?err:'connected')});
+            }
             try{
                 const query = "select id, creation_date, token, expiry_date from view_access_tokens where token = ? and expiry_date > current_timestamp()";
                 conn.query(query, [token], (err, result)=>{
@@ -31,6 +33,7 @@ const TokenController    = class extends AbstractController{
                     }
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
             

@@ -5,8 +5,6 @@ const mysql  = require('mysql');
 
 const Connection = class {
 
-    static connection;
-
     constructor(){
         this.conn = mysql.createConnection(config.dbSettings);
     }
@@ -22,7 +20,7 @@ const Connection = class {
         this.conn.query(query, queryProperties, callback);
     }
 
-    connect = ()=>{
+    connect(callback){
         if (this.conn.state === 'disconnected'){
           this.conn.connect(err=>{console.log(err?err:'connected')});
         }

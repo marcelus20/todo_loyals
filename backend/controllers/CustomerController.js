@@ -9,8 +9,6 @@ const Customer           = require('../models/pojo').Customer;
 
 const CustomerController = class extends AbstractController{
 
-    static customerController = null;
-
     constructor(){
         super();
     }
@@ -53,6 +51,7 @@ const CustomerController = class extends AbstractController{
                     conn.query(query, [], callback_);
                 }
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }     
         });
@@ -70,6 +69,7 @@ const CustomerController = class extends AbstractController{
                     }
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
         });
@@ -102,6 +102,7 @@ const CustomerController = class extends AbstractController{
                     });  
                 });
             }catch(e){
+                console.log(e);
                 callback(false, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
             }
         });
@@ -125,6 +126,7 @@ const CustomerController = class extends AbstractController{
                     }     
                 });
             }catch(e){
+                console.log(e);
                 callback(false, messages.CRASHING_OPERATION);
             }
         });
@@ -154,6 +156,7 @@ const CustomerController = class extends AbstractController{
                 }  
                 conn.query('select id from records where id = ? and type = "customer"', [existingCustomerId], callback_);
             }catch(e){
+                console.log(e);
                 callback(false, messages.CRASHING_OPERATION);
             }
         });

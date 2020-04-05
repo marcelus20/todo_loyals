@@ -1,5 +1,5 @@
 
-const Connection         = require('../models/Connection_');
+const Connection         = require('../models/Connection');
 const AbstractController = class {
     
     constructor(){
@@ -10,6 +10,7 @@ const AbstractController = class {
         if(this.connection == null){
             this.connection = Connection.getInstance();
         }
+        this.connection.connect();
         callback(this.connection.conn);
     }
 

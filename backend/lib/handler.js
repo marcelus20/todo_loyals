@@ -55,6 +55,7 @@ handler.getCustomer               = (req, res) => {
             }
         });
     }catch(e){
+        console.log(e);
         handler.sendResponse(res, {}, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
     }    
 }
@@ -96,6 +97,7 @@ handler.getCard                   = (req, res) => {
             }
         });
     }catch(e){
+        console.log(e);
         handler.sendResponse(res, {}, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
     }
 }
@@ -128,6 +130,7 @@ handler.getBalance                = (req, res) => {
             }
         });
     }catch(e){
+        console.log(e);
         handler.sendResponse(res, {}, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
     }
 }
@@ -176,6 +179,7 @@ handler.createCustomerWithUUID    = (req, res) => {
             }
         });
     }catch(e){
+        console.log(e);
         handler.sendResponse(res, {}, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
     }
 }
@@ -205,6 +209,7 @@ handler.createTransaction         = (req, res) => {
             }
         });
     }catch(e){
+        console.log(e);
         handler.sendResponse(res, {}, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
     }
 }
@@ -239,6 +244,7 @@ handler.getTransactions           = (req, res) => {
             }
         });
     }catch(e){
+        console.log(e);
         handler.sendResponse(res, {}, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
     }
 }
@@ -253,6 +259,7 @@ handler.notFound = (req, res) => {
             }
         });
     }catch(e){
+        console.log(e);
         handler.sendResponse(res, {}, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
     }
 }
@@ -267,7 +274,8 @@ handler.validate = (req, callback) => {
             callback(valid);
         });
     }catch(e){
-
+        console.log(e);
+        handler.sendResponse(res, {}, httpStatus.INTERNAL_ERROR, messages.CRASHING_OPERATION);
     }
 }
 
