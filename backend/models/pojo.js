@@ -45,10 +45,24 @@ pojo.Transaction = class extends pojo.Record{
     }
 }
 
+pojo.AccessToken = class extends pojo.Record{
+    constructor(accessTokenId, date = new Date(), token, expiryDate){
+        super(accessTokenId, date);
+        this.token = token;
+        this.expiryDate = expiryDate;
+    }
+}
+
 
 pojo.ViewingResult = class {
     constructor(){
         this.message = "Something went wrong";
+    }
+
+    static createViewingResult(message){
+        const result = new ViewingResult();
+        result.message = message;
+        return result;
     }
 }
 

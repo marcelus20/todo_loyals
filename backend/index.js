@@ -3,38 +3,28 @@
   */
  
  //NPM modules
- const express     = require('express'),
- cors              = require('cors'),
- 
- //My own libraries
-config             = require('./lib/config'),
-handlers           = require('./lib/handlers'),
+const express    = require('express');
+const logger     = require("morgan");
+const cors       = require("cors");
+const http       = require("http");
+const bodyParser = require("body-parser");
 
-//router
-router             = express();
+const app        = express(); 
+// //My own libraries
+const config     = require('./lib/config');
+const handlers   = require('./lib/handler');
+const routes     = require('./lib/routes');
+
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(routes);
 
 
-router.use(express.json());
-router.use(cors());
-/**GET */
-router.get('/api/customers', handlers.getCustomer);
-router.get('/api/customers/:id', handlers.getCustomer);
-router.get('/api/cards/', handlers.getCard);
-router.get('/api/cards/:uuid/', handlers.getCard);
-router.get('/api/balance/:uuid', handlers.getBalance);
-router.get('/api/transactions/:uuid', handlers.getTransactions);
-router.get('/api/transactions/', handlers.getTransactions);
-
-/**POST */
-router.post('/api/customers/cards/', handlers.createCustomerWithUUID);
-router.post('/api/customers/cards/:customer_id', handlers.createCustomerWithUUID);
-router.post('/api/transactions/:value', handlers.createTransaction);
+app.use(express.json());
+app.use(cors());
 
 
 
-
-
-
-router.listen(config.httpPort, ()=>{
-    console.log(`Running ${config.name} on ${config.httpPort} port`)
+app.listen(config.serverSettings.port, ()=>{
+    console.log(`Running ${config.serverSettings.name} on ${config.serverSettings.port} port`)
 });

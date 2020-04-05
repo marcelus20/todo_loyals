@@ -1,6 +1,6 @@
 #DOCKER COMPOSE FILE
 #CREATED BY FELIPE MANTOVANI
-version: '3.7'
+version: '2'
 
 services:
   

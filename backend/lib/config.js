@@ -1,19 +1,32 @@
 
-//importing dependencies
-const Enviroment = require('./models/Enviroment');
-const helper = require('./helper');
+const config          = {};
+config.dbSettings     = {
+    host              : 'db',
+    port              : 3306,
+    user              : 'root',
+    password          : '12345678',
+    database          : 'loyals',
+    multipleStatements: true
+}
+config.serverSettings = {
+    name : "staging",
+    port : 3000
+}
+config.httpStatus     = {
+    "OK"             : 200,
+    "FORBIDDEN"      : 403,
+    "INTERNAL_ERROR" : 500,
+    "NOT_AVAILABLE"  : 503,
+    "NOT_FOUND"      : 404
+}
+config.messages       = {
+    "OPERATION_NOT_PERMITTED"     : "OPERATION NOT PERMITTED",
+    "QUERY_NOT_EXECUTED"          : "QUERY NOT EXECUTED",
+    "SOMETHING_WENT_WRONG"        : "SOMETHING WENT WRONG",
+    "NO_RELATED_ROUTING_FOUND"    : "NO RELATED ROUTING FOUND",
+    "CRASHING_OPERATION"          : "OPERATION STOPPED DUE TO CAUSING CRASH",
+    "QUERY_RETURNED_NO_RESULTSET" : "QUERY RETURNED NO RESULT_SET",
+    "INSUFICIENT_PARAMETERS"      : "INSUFICIENT_PARAMETERS"
+}
 
-const enviroments = {}
-
-//assiginging staging and production instances
-enviroments.staging = new Enviroment("staging", 3000, 3001);
-enviroments.production = new Enviroment("production", 80, 443);
-
-//validating the NODE_ENV value
-const currentEnviroment = typeof process.env.NODE_ENV == 'string'? process.env.NODE_ENV.toLocaleLowerCase(): '';
-
-//validating the module that will export is one of the modules described above
-const moduleToExport = typeof enviroments[currentEnviroment] == 'object'? enviroments[currentEnviroment] : enviroments.staging;
-
-
-module.exports = moduleToExport;
+module.exports        = config;
