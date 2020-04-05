@@ -23,7 +23,7 @@ CREATE TABLE access_tokens (
 CREATE TABLE cards (
                 card_id INT NOT NULL,
                 customer_id INT NOT NULL,
-                uuid VARCHAR(20) NOT NULL,
+                uuid VARCHAR(20) NOT NULL UNIQUE,
                 PRIMARY KEY (card_id, customer_id)
 );
 
