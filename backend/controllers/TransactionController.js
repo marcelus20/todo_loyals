@@ -79,11 +79,17 @@ const TransactionController = class extends AbstractController{
                                                 //all bad
                                                 conn.rollback(()=>callback(false, message));
                                             }else{
+                                                if(balance >= 9){
+                                                    value = -9
+                                                }
                                                 //all good
                                                 this.insertTransaction_(transactionId, cardId, customerId, value, (success, message)=>{
                                                     if(success){
                                                         conn.commit(()=>{
-                                                            callback(success);
+                                                            if(value < 0){
+                                                                message = messages.POINTS_REDEEMED
+                                                            }
+                                                            callback(success, message?message:undefined);
                                                         });
                                                     }else{
                                                         callback(false, httpStatus.INTERNAL_ERROR, message);
@@ -111,7 +117,7 @@ const TransactionController = class extends AbstractController{
                 conn.beginTransaction(e=>{
                     this.insertTransactionRecord(uuid, value,(success, message) => {
                         if(success){
-                            callback(success);
+                            callback(success, httpStatus.OK, message);
                         }else{
                             conn.rollback(()=>{
                                 callback(false, httpStatus.INTERNAL_ERROR, message);

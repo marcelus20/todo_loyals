@@ -11,11 +11,6 @@ services:
      - "3000:3000" 
    depends_on:
      - db
-  #THIRD VM: FRONTEND
-  #frontend: #@TODO: assign ports to frontend!
-  #  build: ./frontend
-
-  #FIRST VM: THE DATABASE
   db:
     image: mysql:8.0.19
     volumes:
@@ -28,5 +23,13 @@ services:
       - "MYSQL_USER=loyal_user"
       - "MYSQL_PASSWORD=87654321"
     ports:
-      - "3306:3306"
+      - "3306:3306"  
+  # frontend:
+  #   container_name: frontend
+  #   build: ./frontend
+  #   ports:
+  #     - 80:80
+  #   depends_on:
+  #    - backend
+
      

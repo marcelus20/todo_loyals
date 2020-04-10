@@ -195,9 +195,11 @@ handler.createTransaction         = (req, res) => {
                 const transactionController = TransactionController.getInstance();
                 transactionController.insertTransaction(uuid, value, (success, status, message)=>{
                     const result = {};
-                    if(!status && success){
+                    console.log(success, status, message);
+                    if(success){
                         result.success = true;
-                        handler.sendResponse(res, result);
+                        result.message = message;
+                        handler.sendResponse(res, result, httpStatus.OK, message);
                     }else{
                         if(message){
                             handler.sendResponse(res, result, status, message);
