@@ -3,38 +3,25 @@
 version: '2'
 
 services:
-  
-  #SECOND VM: THE BACKEND, TO BE UP WHENEVER DB IS UP
-  # backend:
-  #  build: ./backend
-  #  ports:
-  #    - "3000:3000" 
-  #  depends_on:
-  #    - db
-  # db:
-  #   image: mysql:8.0.19
-  #   volumes:
-  #     - ./db/:/docker-entrypoint-initdb.d
-  #   command: --default-authentication-plugin=mysql_native_password
-  #   restart: always
-  #   environment:
-  #     - "MYSQL_ROOT_PASSWORD=12345678"
-  #     - "MYSQL_DATABASE=loyals"
-  #     - "MYSQL_USER=loyal_user"
-  #     - "MYSQL_PASSWORD=87654321"
-  #   ports:
-  #     - "3306:3306"  
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+  backend:
+   build: ./backend
+   ports:
+     - "3000:3000" 
+   depends_on:
+     - db
+  db:
+    image: mysql:8.0.19
     volumes:
-      - './frontend:/app'
-      - '/app/node_modules'
-    ports:
-      - 80:3000
+      - ./db/:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      - "MYSQL_ROOT_PASSWORD=12345678"
+      - "MYSQL_DATABASE=loyals"
+      - "MYSQL_USER=loyal_user"
+      - "MYSQL_PASSWORD=87654321"
+    ports:
+      - "3306:3306"  
+
 
      
