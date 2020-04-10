@@ -3,8 +3,6 @@
 version: '2'
 
 services:
-  
-  #SECOND VM: THE BACKEND, TO BE UP WHENEVER DB IS UP
   backend:
    build: ./backend
    ports:
@@ -24,12 +22,6 @@ services:
       - "MYSQL_PASSWORD=87654321"
     ports:
       - "3306:3306"  
-  # frontend:
-  #   container_name: frontend
-  #   build: ./frontend
-  #   ports:
-  #     - 80:80
-  #   depends_on:
-  #    - backend
+
 
      
