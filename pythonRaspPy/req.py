@@ -1,11 +1,3 @@
-import subprocess
-import os
-
-
-text = subprocess.check_output(["sudo","nfc-poll"])
-index = text.find ("NFCID1")
-uuidPleaseWork = text[index + 9:index+23].replace(" ", "")
-print(text[index + 9:index+23].replace(" ", ""))
 
 import requests
 import json
@@ -56,10 +48,10 @@ def get_balance(uuid):
 
 #print(get_cards())
 #print(create_card(uuidPleaseWork))
-print(create_transactions(uuidPleaseWork, 1))
+#print(create_transactions(uuidPleaseWork, 1))
 # print(create_transactions('A_____U____A',20))
 # print(create_transactions('A_____U____A',20))
 # print(create_transactions('A_____U____A',-10))
 # print(get_transactions())
 # print(get_transactions('A_____U____A'))
-print(get_balance(uuidPleaseWork))
+##print(get_balance(uuidPleaseWork))
