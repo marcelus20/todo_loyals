@@ -9,6 +9,6 @@ WORKDIR /root/apps
 #COPYING THE FILES FROM THE SAME LEVEL AS THIS DOCKERFILE TO THE WORKDIRECTORY
 COPY . /root/apps
 
-RUN npm i bootstrap react-bootstrap axios react-circular-progressbar
+RUN npm i install
 
 CMD ["npm", "start"]
