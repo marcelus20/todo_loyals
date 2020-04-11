@@ -22,6 +22,15 @@ services:
       - "MYSQL_PASSWORD=87654321"
     ports:
       - "3306:3306"  
+  frontend:
+    build: ./frontend
+    ports:
+     - "80:3000" 
+    depends_on:
+     - backend
+    stdin_open: true
+    tty: true
+    
 
 
      
