@@ -1,9 +1,5 @@
 import React from "react";
-import "./UuidDisplay.css";
-import Jumbotron from 'react-bootstrap/Jumbotron'
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import { Timeline } from 'antd';
 
 class UuidDisplay extends React.Component{
 
@@ -31,17 +27,11 @@ class UuidDisplay extends React.Component{
             return (<div>Loading...</div>);
         }else{
         return (
-            <Jumbotron>
-                <Container>
-                    <Row xs={1}>
-                        <Col fluid>uuid</Col>
-                    </Row>
-                    <Row xl={10}>
-                        <Col fluid>{this.state.uuid}</Col>
-                    </Row>
-                </Container>
-                
-            </Jumbotron>
+            <Timeline>
+                <Timeline.Item>Select card UUID</Timeline.Item>
+                <Timeline.Item>Check balance</Timeline.Item>
+                <Timeline.Item>Check card associated transactions</Timeline.Item>
+            </Timeline>
         );
         }
         

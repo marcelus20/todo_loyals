@@ -1,78 +1,98 @@
 import React from "react";
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Balance from "../balance/Balance";
-import UuidDisplay from "../uuidDisplay/UuidDisplay";
-import Transactions from "../transactions/Transactions";
-import UuidList from "../uuidList/UuidList";
-import Spinner from 'react-bootstrap/Spinner';
 import "./Dashboard.css";
+import { Layout, Menu, Row, Col, Empty} from 'antd';
+import Stats from "../stats/Stats";
+import About from "../about/About";
+import {
+  AppstoreOutlined,
+  BarChartOutlined,
+} from '@ant-design/icons';
+
+import CardDetails from "../cardDetails/CardDetails";
+
+const { Header, Content, Footer, Sider } = Layout;
 
 class Dashboard extends React.Component{
 
     constructor(props){
         super(props);
         this.state = {
-            "hide" : true
+            "show" : {
+                "stats"        : true,
+                "cards"        : false,
+                "about"        : false
+            }
         }
     }
 
-
-    unHideDashboard = () => {
-        this.setState({"hide": !this.state.hide});
+    displayStats = () => {
+      const show = {...this.state.show};
+      Object.keys(show).forEach(key=>show[key] = false);
+      show.stats = true;
+      this.setState({show: show});
     }
 
-    updateSelectedCard = (card)=>{
-        console.log(card);
-        this.setState({
-            "selectedCard": card
-        }, this.unHideDashboard);
-
-        
+    displayAbout = () => {
+      const show = {...this.state.show};
+      Object.keys(show).forEach(key=>show[key] = false);
+      show.about = true;
+      this.setState({show: show});
     }
 
-    render(){
-        return (
-            <div>
-            <Container className={`cardList ${this.state.hide?"":"hide"}`}  fluid >
-                <Row className="justify-content-md-center">
-                    <Col><UuidList selectedCard={card=>this.updateSelectedCard(card)}/></Col>
-                </Row>
-            </Container>
-            
-            <Container md={10} className={this.state.hide?"hide":""}>
-                
-                <Row>
-                    <Col md={5}>
-                        {!this.state.selectedCard?(
-                            <Spinner animation="grow" size="xl"/>
-                        ):(
-                            <Balance uuid = {this.state.selectedCard.uuid} className="d-flex justify-content-around"/>
-                        )
-                        }
-                    </Col>
-                    <Col md={5}>{
-                        !this.state.selectedCard?(
-                            <Spinner animation="grow" size="xl"/>
-                        ):(
-                            <UuidDisplay uuid = {this.state.selectedCard.uuid} className="d-flex justify-content-around"/>
-                        )
-                    }</Col>
-                </Row>
+    displayCardDetails = () => {
+        const show = {...this.state.show};
+        Object.keys(show).forEach(key=>show[key] = false);
+        show.cards = true;
+        this.setState({show: show});
+    }
     
-                <Row>
-                    <Col md={10}>{
-                        !this.state.selectedCard?(
-                            <Spinner animation="grow" size="xl"/>
-                        ):(
-                            <Transactions uuid = {this.state.selectedCard.uuid}/>
-                        )
-                    }
-                    </Col>                
-                </Row>
-            </Container>
-            </div>  
+    render(){
+        console.log(this.state.about);
+        return (
+
+            <Layout>
+              <Sider
+                style={{
+                  overflow: 'auto',
+                  height: '100vh',
+                  position: 'fixed',
+                  left: 0,
+                }}
+              >
+                <div className="logo" />
+                <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+                  <Menu.Item key="1" onClick={this.displayStats}>
+                    <BarChartOutlined />
+                    <span className="nav-text">Stats</span>
+                  </Menu.Item>
+                  <Menu.Item key="2" onClick={this.displayCardDetails}>
+                    <AppstoreOutlined />
+                    <span className="nav-text">Card details</span>
+                  </Menu.Item>
+                  <Menu.Item key="3" onClick={this.displayAbout}>
+                    <AppstoreOutlined />
+                    <span className="nav-text">About TODO group</span>
+                  </Menu.Item>
+                </Menu>
+              </Sider>
+              <Layout className="site-layout" style={{ marginLeft: 200 }}>
+                <Header className="site-layout-background" style={{ padding: 0, backgroundColor: "#f0f0f0" }} />
+                <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+                  <div className="site-layout-background" style={{ padding: 24, textAlign: 'center', backgroundColor: "#f0f5ff" }}>
+                    <Row>
+                      {this.state.show.stats?(
+                        <Col span={24}><Stats show = {this.state.show}/></Col>  
+                        ):this.state.show.cards?(
+                        <Col span={24}><CardDetails /></Col>
+                      ):this.state.show.about?(
+                        <Col span={24}><About /></Col>
+                      ):(<Empty/>)}
+                    </Row>
+                  </div>
+                </Content>
+                <Footer style={{ textAlign: 'center' }}>TODO - Loyals</Footer>
+              </Layout>
+            </Layout> 
         );
     }
 }

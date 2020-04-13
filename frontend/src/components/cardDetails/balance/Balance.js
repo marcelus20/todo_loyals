@@ -1,12 +1,6 @@
 import React from "react";
-import axiosInstance from "../../tools/axiosInstance";
-import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
-import Jumbotron from "react-bootstrap/Jumbotron";
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Spinner from 'react-bootstrap/Spinner'
+import axiosInstance from "../../../tools/axiosInstance";
+import {Row, Col, Skeleton, Divider, Progress, Spin} from "antd";
 
 class Balance extends React.Component{
 
@@ -46,20 +40,16 @@ class Balance extends React.Component{
     
     render(){
         return (
-            <Jumbotron>
+            <Row>
                 {!this.state.balance?(
-                <Spinner animation="grow" size="xl"/>
+                    <Spin size="large"><Skeleton /></Spin>
                 ):(
-                    <Container>
-                        <Row xs={1}>
-                            <Col>balance</Col>
-                        </Row>
-                        <Row xl={10}>
-                            <Col><CircularProgressbar value={this.state.balance*10} text={`${this.state.balance}pts`} /></Col>
-                        </Row>
-                    </Container>
+                    <Col span={8}>
+                        <Divider orientation="left"> Balance </Divider>
+                        <Progress type="circle" percent={this.state.balance*10} format={percent => `${percent/10} pts`} />
+                    </Col>
                 )} 
-            </Jumbotron>
+            </Row>
         );
 
     }

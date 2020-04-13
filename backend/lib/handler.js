@@ -10,14 +10,15 @@ const TokenController             = require('../controllers/TokenController');
 const config                      = require('./config');
 const httpStatus                  = config.httpStatus;
 const messages                    = config.messages;
-const headers                      = {'Content-Type': 'application/json'}; 
+
+
 const handler                     = {}
 handler.sendResponse              = (response, result, status = httpStatus.OK, message)=>{
         if(message){
             result["message"] = message;
         }
-        response.writeHead(status, headers);
-        response.end(JSON.stringify(result));
+        response.status(status);
+        response.json(result);
 }
 handler.getCustomer               = (req, res) => {
     try{

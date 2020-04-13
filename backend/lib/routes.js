@@ -3,7 +3,13 @@ const express            = require('express');
 const routes             = express.Router();
 const CustomerController = require('../controllers/CustomerController');
 const handler            = require('./handler');
-
+const cors                 = require('cors');
+const corsOptions          = {
+                            origin: '*',
+                            optionsSuccessStatus: 200,
+                        }
+routes.use(cors(corsOptions));
+routes.use(express.json())
 
 
 
