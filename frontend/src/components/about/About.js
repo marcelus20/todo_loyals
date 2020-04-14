@@ -30,7 +30,7 @@ class About extends React.Component{
                     </Row>
                     <Row>
                         <Col span={12}>
-                            <Divider orientation="left" >Olga Kiseleva</Divider>
+                            <Divider orientation="center" >Olga Kiseleva</Divider>
                             <Avatar size={200}  src={"https://media-exp1.licdn.com/dms/image/C4D03AQHpz8z1l1-n_g/profile-displayphoto-shrink_800_800/0?e=1592438400&v=beta&t=MEhpn4_CIZdZIrYzZTmhKwN9Ko0-1QyPIEjkk6bIHCQ"}/>
                         </Col>
                         
