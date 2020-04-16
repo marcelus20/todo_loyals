@@ -1,6 +1,7 @@
 import React from "react";
 import axiosInstance from "../../../tools/axiosInstance";
-import { List, Divider, Row, Col, Skeleton, Spin } from 'antd';
+import { List, Row, Col, Skeleton, Spin } from 'antd';
+import "./uuidList.css"
 
 
 class UuidList extends React.Component{
@@ -8,7 +9,10 @@ class UuidList extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            
+            "itemColor":{
+                "hilighted":"red",
+                "normal":"white"
+            }
         }
     }
 
@@ -32,9 +36,10 @@ class UuidList extends React.Component{
     }
 
     selectCard = (item) => {
-        const card = this.state.cards.filter(card=>card.uuid == item)[0];
+        const card = this.state.cards.filter(card=>card.uuid === item)[0];
         this.setState({
-            "selectedCard": card
+            "selectedCard": card,
+            "selectedUUID": card.uuid
         },()=>{
             this.props.selectCard(card)
         });
@@ -50,7 +55,6 @@ class UuidList extends React.Component{
     return (
         <Row>
             <Col span={24}>
-            <Divider orientation="left">Cards UUIDs</Divider>
             {this.state.cards?(
                 <List
                 size="large"
@@ -58,7 +62,12 @@ class UuidList extends React.Component{
                 footer={<div>cards</div>}
                 bordered
                 dataSource={data}
-                renderItem={item => <List.Item onClick={()=>this.selectCard(item)}>{item}</List.Item>}
+                renderItem={
+                    item => <List.Item onClick={
+                        ()=>this.selectCard(item)
+                    } 
+                    className={"pointer"}
+                    style={this.state.selectedUUID === item?{backgroundColor:"#e6fffb"}:null}>{item}</List.Item>}
                 />
             ):(<div>
                 <Spin size="large"><Skeleton /></Spin>
@@ -67,37 +76,6 @@ class UuidList extends React.Component{
         </Row>
         );
     
-
-    // componentDidUpdate(){
-
-    // }
-    
-    
-
-
-
-
-    // render(){
-    //     return !this.state.cards?(
-    //         <Spinner animation="grow" />
-    //     ):(
-            
-            
-            
-    //         // <Container className="centralize">
-    //         //     <Row>
-    //         //         <Col lg="auto" className="text-cetered">Card UUIDs</Col>
-    //         //     </Row>
-    //         //     <Row>
-    //         //         <Col lg="auto">
-    //         //             <ListGroup>
-    //         //                 {this.state.cards.map(card=><ListGroup.Item key={card.id} onClick={()=>this.selectCard(card)}>{card.uuid}</ListGroup.Item>)}
-    //         //             </ListGroup>
-    //         //         </Col>
-    //         //     </Row>
-    //         // </Container>
-    //     );
-    // }
     }
 
 }

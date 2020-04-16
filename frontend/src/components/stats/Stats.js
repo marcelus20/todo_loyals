@@ -54,6 +54,7 @@ class Stats extends React.Component{
             <div>
                 <Row>
                     <Col span={12}>
+                        
                         {!this.state.transactions?(
                             <Spin><Skeleton /></Spin>
                         ):(

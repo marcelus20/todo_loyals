@@ -1,5 +1,5 @@
 import React from "react";
-import { Timeline } from 'antd';
+import { Descriptions, Skeleton } from 'antd';
 
 class UuidDisplay extends React.Component{
 
@@ -11,27 +11,27 @@ class UuidDisplay extends React.Component{
     }
 
     componentDidMount(){
-        let uuid;
-        if(this.props.uuid){
-            uuid = this.props.uuid;
+        let card;
+        if(this.props.card){
+            card = this.props.card;
         }else{
-            uuid = ""
+            card = false;
         }
-        const uuidObject = {"uuid": uuid}
+        const uuidObject = {"card": card}
         this.setState(uuidObject);
     }
 
     render(){
-        if(!this.state.uuid || this.state.uuid === ""){
+        if(!this.state.card){
             //nothing displayed
-            return (<div>Loading...</div>);
+            return (<Skeleton />);
         }else{
         return (
-            <Timeline>
-                <Timeline.Item>Select card UUID</Timeline.Item>
-                <Timeline.Item>Check balance</Timeline.Item>
-                <Timeline.Item>Check card associated transactions</Timeline.Item>
-            </Timeline>
+            <Descriptions title={"UUID: "+this.state.card.uuid} layout="vertical">
+                <Descriptions.Item label="Card ID">{this.state.card.id}</Descriptions.Item>
+                <Descriptions.Item label="Customer ID">{this.state.card.customer_id}</Descriptions.Item>
+                <Descriptions.Item label="Date of registration">{this.state.card.date}</Descriptions.Item>
+            </Descriptions>
         );
         }
         

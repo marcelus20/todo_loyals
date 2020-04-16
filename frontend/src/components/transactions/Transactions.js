@@ -1,5 +1,5 @@
 import React from "react";
-import { Statistic, Row, Col, Button, Table } from 'antd';
+import {Table } from 'antd';
 
 
 class Transactions extends React.Component{
@@ -19,7 +19,6 @@ class Transactions extends React.Component{
             transaction.key=`transaction${index}`;
             return transaction;
         });
-        console.log("datasource", dataSource);
         const columns = [
             {
                 title: "transaction id",
@@ -27,7 +26,7 @@ class Transactions extends React.Component{
                 key : "id"   
             },{
                 title: "Date processed",
-                dataIndex: "Date",
+                dataIndex: "date",
                 key : "date"   
             },{
                 title: "Card id",

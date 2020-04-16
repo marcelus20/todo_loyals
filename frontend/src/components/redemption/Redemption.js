@@ -1,7 +1,5 @@
 import React from "react";
-import { Statistic, Row, Col, Button, Skeleton } from 'antd';
-import axiosInstance from "../../tools/axiosInstance";
-import Spinner from "react-bootstrap/Spinner";
+import { Statistic, Row, Col} from 'antd';
 
 
 class Redemption extends React.Component{
@@ -21,8 +19,7 @@ class Redemption extends React.Component{
         <Row>
             <Col span={12}>
             <Statistic title="Number of promotions redeemed" value={this.state.redemptionsGiven} />
-            </Col>
-            
+            </Col> 
         </Row>
         );
     }

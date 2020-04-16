@@ -1,10 +1,11 @@
 import React from "react";
 
-import { Row, Col, Skeleton, Divider, Spin } from 'antd';
+import { Row, Col, Skeleton, Timeline } from 'antd';
 import UuidList from "./uuidList/UuidList";
 import Balance from "./balance/Balance";
 import Transactions from "../transactions/Transactions";
 import axiosInstance from "../../tools/axiosInstance";
+import UuidDisplay from "./uuidDisplay/UuidDisplay";
 
 
 class CardDetails extends React.Component{
@@ -32,6 +33,13 @@ class CardDetails extends React.Component{
     }
 
 
+    flushOldSelectedCard = (card) => {
+        this.setState({
+            "selectedCard" : false,
+            "transactions" : false
+        }, () => this.selectCard(card));
+    }
+    
     selectCard = (card) => {
         this.setState({"selectedCard": card}, this.requestTransactions);
     }
@@ -41,8 +49,24 @@ class CardDetails extends React.Component{
             <div>
                 <Row>
                     <Col span={24}>
-                    <Divider orientation="left">Click one of the UUIDs to display data</Divider>
-                        <UuidList selectCard={card=>this.selectCard(card)} />
+                        <h3>Card Details</h3>
+                        <Timeline>
+                        <Timeline.Item color="green">Pick one UUID below</Timeline.Item>
+                        <Timeline.Item color="blue">See details about the selected UUID</Timeline.Item>
+                        <Timeline.Item color="red">See balance and transactions associated</Timeline.Item>
+                        </Timeline>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <UuidList selectCard={card=>this.flushOldSelectedCard(card)} />
+                    </Col>
+                    <Col span={12}>
+                        {!this.state.selectedCard?(
+                            <Skeleton />
+                        ):(
+                            <UuidDisplay card = {this.state.selectedCard} />
+                        )}
                     </Col>
                 </Row>
                 <Row>
