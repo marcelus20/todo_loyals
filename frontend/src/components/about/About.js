@@ -34,7 +34,6 @@ class About extends React.Component{
                     </Row>
                     <Row>
                         <Col span={12}>
-                        
                             <Popover content={(
                                 <div>
                                     <a href={"https://www.linkedin.com/in/okkiseleva/" }target="blanck"><LinkedinOutlined style={{fontSize:"5em"}}/></a>
@@ -43,11 +42,8 @@ class About extends React.Component{
                             )} title="Olga's Profile" placement="rightTop">
                                 <Divider orientation="center" ><h3>Olga Kiseleva</h3></Divider>
                                 <Avatar size={200}  src={"https://media-exp1.licdn.com/dms/image/C4D03AQHpz8z1l1-n_g/profile-displayphoto-shrink_800_800/0?e=1592438400&v=beta&t=MEhpn4_CIZdZIrYzZTmhKwN9Ko0-1QyPIEjkk6bIHCQ"}/>
-                            </Popover>
-                            
-                            
-                        </Col>
-                        
+                            </Popover>                   
+                        </Col>                     
                         <Col span={12}>
                             <Popover content={(
                                 <div>
