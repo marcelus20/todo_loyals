@@ -25,9 +25,11 @@ class About extends React.Component{
                     <Row>
                         <Col span={24}>
                         <Descriptions title="Group Info">
-                            <Descriptions.Item label="name">TODO</Descriptions.Item>
-                            <Descriptions.Item label="Composed of">4</Descriptions.Item>
-                            <Descriptions.Item label="Description">Short text in this part</Descriptions.Item>
+                            <Descriptions.Item label="name">TODO group</Descriptions.Item>
+                            <Descriptions.Item label="Composed of">4 participants</Descriptions.Item>
+                            <Descriptions.Item label="Description">
+			       The TODO group is a third year computer science group composed of brilliant individuals, starting from a highly qualified designer to software developers and hardware technicians. For the third year project, the group found a way to innovate the loyalty coupon industry of coffee shops by developing this simplistic and amazing fidelity system.
+                            </Descriptions.Item>
                     
                         </Descriptions>
                         </Col>

@@ -2,7 +2,7 @@
 import requests
 import json
 
-base_url = 'http://34.244.241.179:3000/api';
+base_url = 'http://34.247.164.71:3000/api';
 
 headers = {
 	"__token__":"XNnzXyVCMO0tUzyGp4NNWMOM7zrVcZUnmOeOVaF8Qdl1AlcnpB"
